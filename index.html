@@ -48,6 +48,7 @@
       color: white;
       font-size: 16px;
       cursor: pointer;
+      margin-top: 10px;
     }
 
     button:hover {
@@ -67,6 +68,14 @@
       color: red;
       margin-top: 10px;
     }
+
+    .whatsapp {
+      background: #25D366;
+    }
+
+    .whatsapp:hover {
+      background: #1ebe5d;
+    }
   </style>
 </head>
 <body>
@@ -81,17 +90,27 @@
     <div id="error" class="error"></div>
 
     <div id="resultado" class="resultado" style="display:none"></div>
+
+    <button id="btnWhatsapp" class="whatsapp" style="display:none" onclick="enviarWhatsApp()">
+      Solicitar por WhatsApp
+    </button>
   </div>
 
   <script>
+    let ultimoMonto = 0;
+    let ultimoMeses = 0;
+    let ultimaCuota = 0;
+
     function calcularPrestamo() {
       const monto = Number(document.getElementById('monto').value);
       const meses = Number(document.getElementById('meses').value);
       const errorDiv = document.getElementById('error');
       const resultadoDiv = document.getElementById('resultado');
+      const btnWhatsapp = document.getElementById('btnWhatsapp');
 
       errorDiv.textContent = "";
       resultadoDiv.style.display = "none";
+      btnWhatsapp.style.display = "none";
 
       if (!monto || !meses) {
         errorDiv.textContent = "Ingresa monto y meses válidos.";
@@ -108,6 +127,10 @@
       const total = monto + monto * interes;
       const cuota = total / meses;
 
+      ultimoMonto = monto;
+      ultimoMeses = meses;
+      ultimaCuota = cuota;
+
       resultadoDiv.innerHTML = `
         <strong>Monto:</strong> $${monto.toLocaleString()}<br>
         <strong>Meses:</strong> ${meses}<br>
@@ -116,9 +139,21 @@
       `;
 
       resultadoDiv.style.display = "block";
+      btnWhatsapp.style.display = "block";
+    }
+
+    function enviarWhatsApp() {
+      const numero = "573001734708";
+
+      const mensaje = `Hola, quiero solicitar un préstamo.%0A
+Monto: $${ultimoMonto.toLocaleString()}%0A
+Meses: ${ultimoMeses}%0A
+Cuota aproximada: $${ultimaCuota.toFixed(0).toLocaleString()}`;
+
+      const url = `https://wa.me/${numero}?text=${mensaje}`;
+
+      window.open(url, '_blank');
     }
   </script>
 </body>
 </html>
-
-

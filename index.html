@@ -39,20 +39,37 @@
       font-size: 16px;
     }
 
-    button {
+    button, .whatsapp-btn {
       width: 100%;
       padding: 12px;
       border: none;
       border-radius: 8px;
-      background: #2563eb;
       color: white;
       font-size: 16px;
       cursor: pointer;
       margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
     }
 
-    button:hover {
+    .calcular {
+      background: #2563eb;
+    }
+
+    .calcular:hover {
       background: #1d4ed8;
+    }
+
+    .whatsapp-btn {
+      background: #25D366;
+      display: none;
+    }
+
+    .whatsapp-btn:hover {
+      background: #1ebe5d;
     }
 
     .resultado {
@@ -69,12 +86,9 @@
       margin-top: 10px;
     }
 
-    .whatsapp {
-      background: #25D366;
-    }
-
-    .whatsapp:hover {
-      background: #1ebe5d;
+    .icon {
+      width: 20px;
+      height: 20px;
     }
   </style>
 </head>
@@ -85,15 +99,16 @@
     <input type="number" id="monto" placeholder="Monto del préstamo" />
     <input type="number" id="meses" placeholder="Meses a pagar" />
 
-    <button onclick="calcularPrestamo()">Calcular</button>
+    <button class="calcular" onclick="calcularPrestamo()">Calcular</button>
 
     <div id="error" class="error"></div>
 
     <div id="resultado" class="resultado" style="display:none"></div>
 
-    <button id="btnWhatsapp" class="whatsapp" style="display:none" onclick="enviarWhatsApp()">
+    <a id="btnWhatsapp" class="whatsapp-btn" target="_blank">
+      <img class="icon" src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/whatsapp.svg" alt="WhatsApp">
       Solicitar por WhatsApp
-    </button>
+    </a>
   </div>
 
   <script>
@@ -139,27 +154,13 @@
       `;
 
       resultadoDiv.style.display = "block";
-      btnWhatsapp.style.display = "block";
-    }
 
-    function enviarWhatsApp() {
       const numero = "573001734708";
-
-      const mensaje = `Hola, quiero solicitar un préstamo.
-Monto: $${ultimoMonto.toLocaleString()}
-Meses: ${ultimoMeses}
-Cuota aproximada: $${ultimaCuota.toFixed(0).toLocaleString()}`;
-
-      const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
-
-      window.open(url, '_blank');
-    }%0A
-Meses: ${ultimoMeses}%0A
-Cuota aproximada: $${ultimaCuota.toFixed(0).toLocaleString()}`;
-
+      const mensaje = `Hola, quiero solicitar un préstamo.%0AMonto: $${ultimoMonto.toLocaleString()}%0AMeses: ${ultimoMeses}%0ACuota aproximada: $${ultimaCuota.toFixed(0).toLocaleString()}`;
       const url = `https://wa.me/${numero}?text=${mensaje}`;
 
-      window.open(url, '_blank');
+      btnWhatsapp.href = url;
+      btnWhatsapp.style.display = "flex";
     }
   </script>
 </body>

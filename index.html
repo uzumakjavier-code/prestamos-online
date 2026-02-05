@@ -1,35 +1,124 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Préstamos Online</title>
-  <link rel="stylesheet" href="/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulador de Préstamos</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      width: 320px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #2563eb;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    .resultado {
+      margin-top: 20px;
+      font-size: 15px;
+      text-align: left;
+      background: #f1f5f9;
+      padding: 15px;
+      border-radius: 8px;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
 </head>
-
 <body>
-  <div class="container">
-    ...
+  <div class="card">
+    <h1>Simulador</h1>
+
+    <input type="number" id="monto" placeholder="Monto del préstamo" />
+    <input type="number" id="meses" placeholder="Meses a pagar" />
+
+    <button onclick="calcularPrestamo()">Calcular</button>
+
+    <div id="error" class="error"></div>
+
+    <div id="resultado" class="resultado" style="display:none"></div>
   </div>
-</body>
 
+  <script>
+    function calcularPrestamo() {
+      const monto = Number(document.getElementById('monto').value);
+      const meses = Number(document.getElementById('meses').value);
+      const errorDiv = document.getElementById('error');
+      const resultadoDiv = document.getElementById('resultado');
 
-  <h1>Simulador de Préstamos</h1>
+      errorDiv.textContent = "";
+      resultadoDiv.style.display = "none";
 
-  <form action="/prestamo" method="GET">
-    <label>
-      Monto:
-      <input type="number" name="monto" required>
-    </label>
-    <br><br>
+      if (!monto || !meses) {
+        errorDiv.textContent = "Ingresa monto y meses válidos.";
+        return;
+      }
 
-    <label>
-      Meses:
-      <input type="number" name="meses" required>
-    </label>
-    <br><br>
+      if (monto < 50000 || monto > 1000000) {
+        errorDiv.textContent = "El monto debe estar entre 50.000 y 1.000.000.";
+        return;
+      }
 
-    <button type="submit">Calcular préstamo</button>
-  </form>
+      let interes = meses <= 6 ? 0.08 : 0.12;
 
+      const total = monto + monto * interes;
+      const cuota = total / meses;
+
+      resultadoDiv.innerHTML = `
+        <strong>Monto:</strong> $${monto.toLocaleString()}<br>
+        <strong>Meses:</strong> ${meses}<br>
+        <strong>Interés:</strong> ${(interes * 100)}%<br>
+        <strong>Cuota mensual:</strong> $${cuota.toFixed(0).toLocaleString()}
+      `;
+
+      resultadoDiv.style.display = "block";
+    }
+  </script>
 </body>
 </html>
+
+
